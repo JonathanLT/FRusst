@@ -1,6 +1,28 @@
 [package]
 name = "FRusst"
 version = "0.1.0"
+rust-version = "1.85"
 edition = "2024"
+authors = ["JonathanLT <jonthan.lt@gmail.com>"]
+description = "FRusst is a lightweight and fast RSS feed reader built with Rust."
+readme = "README.md"
+repository = "https://github.com/JonathanLT/FRusst"
+license = "MIT OR Apache-2.0"
+keywords = ["rss"]
+include = [
+    "/Cargo.toml",
+    "/LICENSE-Apache",
+    "/LICENSE-MIT",
+    "/README.md",
+    "/src/**",
+]
+publish = false
+
+[workspace]
+members = ["feed-lib"]
+resolver = "3"
 
 [dependencies]
+feed-lib = { path = "./feed-lib" }
+clap = { version = "4.0", features = ["derive"] }
+tokio = "1.47.1"

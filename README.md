@@ -3,7 +3,7 @@
 **FRusst** is a lightweight and fast RSS feed reader built with **Rust**. Stream, manage, and organize your feeds effortlessly while enjoying the power and safety of Rust.
 
 [![Rust](https://img.shields.io/badge/Rust-1.89.0-orange)](https://www.rust-lang.org/)
-[![License APACHE 2.0](https://img.shields.io/badge/license-APACHE_2.0-blue)](LICENSE-Apache)
+[![License Apache 2.0](https://img.shields.io/badge/license-Apache_2.0-blue)](LICENSE-Apache)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE-MIT)
 [![Issues](https://img.shields.io/github/issues/JonathanLT/FRusst)](https://github.com/JonathanLT/FRusst/issues)
 
@@ -19,7 +19,7 @@
 
 Make sure you have Rust installed. Then:
 
-```
+```bash
 git clone https://github.com/yourusername/FRusst.git
 cd FRusst
 cargo build --release
@@ -29,12 +29,15 @@ The binary will be in `target/release/frusst`.
 
 ## Usage
 
-```
+```bash
+# Manage some feed
 ./frusst add https://example.com/rss example.com   # Add a new RSS feed with a custom name
 ./frusst list                                      # List all subscribed feeds
-./frusst fetch example.com                         # Fetch the latest articles
-./frusst get example.com 10                        # Show the last 10 articles from a feed 
 ./frusst remove example.com                        # Remove a feed
+# Update feeds news
+./frusst fetch                              # Fetch the latest articles from all feeds 
+./frusst fetch -F[--feed]                              # Fetch the latest articles from feed list, seperated by comma 
+./frusst get example.com 10                        # Show the last 10 articles from a feed 
 ```
 
 ## Roadmap
@@ -66,7 +69,7 @@ This project is licensed under the Apache 2.0 and MIT licenses. See the [LICENSE
 
 ## Tagline
 
-**"FRusst: Where Rust meets RSS."**
+**\"FRusst: Where Rust meets RSS Feed.\"**
 
 ---
 

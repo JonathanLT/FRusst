@@ -13,10 +13,55 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      MONGODB_URI: ${{ vars.MONGODB_URI }}
+      MONGODB_LOGIN: ${{ vars.MONGODB_LOGIN }}
+      MONGODB_PWD: ${{ secrets.MONGODB_PWD }}
+      MONGODB_CLUSTER: ${{ vars.MONGODB_CLUSTER }}
     steps:
     - uses: actions/checkout@v4
     - name: Build
       run: cargo build --verbose
+
+    # Grant temporary MongoDB access to this Github Action runner ip address
+    - name: Get the public IP of this runner
+      id: get_gh_runner_ip
+      shell: bash
+      run: |
+        echo "ip_address=$(curl https://checkip.amazonaws.com)" >> "$GITHUB_OUTPUT"
+    - name: Permit the runner to access MongoDB Atlas
+      id: allow-ip
+      shell: bash
+      run: |
+        curl \
+          --data '[{"ipAddress": "${{ steps.get_gh_runner_ip.outputs.ip_address }}", "comment": "GitHub Actions Runner"}]' \
+          --digest \
+          --header 'Accept: application/vnd.atlas.2023-02-01+json' \
+          --header 'Content-Type: application/json' \
+          --user "$USERNAME:$PASSWORD" \
+          "https://cloud.mongodb.com/api/atlas/v2/groups/$PROJECT_ID/accessList"
+      env:
+        PROJECT_ID: ${{ secrets.ATLAS_PROJECT_ID }}
+        PASSWORD: ${{ secrets.ATLAS_PRIVATE_KEY }}
+        USERNAME: ${{ secrets.ATLAS_PUBLIC_KEY }}
+
+
+    # Run tests
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --all --verbose
+
+    # Revoke temporary MongoDB access
+    - name: Revoke the runner's access to MongoDB Atlas
+      if: always() && steps.allow-ip.outcome == 'success'
+      shell: bash
+      run: |
+        curl \
+          --digest \
+          --header 'Accept: application/vnd.atlas.2023-02-01+json' \
+          --request 'DELETE' \
+          --user "$USERNAME:$PASSWORD" \
+          "https://cloud.mongodb.com/api/atlas/v2/groups/$PROJECT_ID/accessList/${{ steps.get_gh_runner_ip.outputs.ip_address }}"
+      env:
+        PROJECT_ID: ${{ secrets.ATLAS_PROJECT_ID }}
+        PASSWORD: ${{ secrets.ATLAS_PRIVATE_KEY }}
+        USERNAME: ${{ secrets.ATLAS_PUBLIC_KEY }}
