@@ -1,5 +1,6 @@
 // This file defines the Feed struct and its associated methods for managing individual RSS feeds.
 
+use log::{debug};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -10,7 +11,7 @@ pub struct Feed {
 
 impl Feed {
     pub fn new(title: String, url: String) -> Self {
-        println!("Adding RSS feed: {} with title: {}", url, title);
+        debug!("Adding RSS feed: {} with title: {}", url, title);
         Feed { title, url }
     }
 

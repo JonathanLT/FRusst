@@ -15,6 +15,7 @@ include = [
     "/LICENSE-MIT",
     "/README.md",
     "/src/**",
+    "/feed-lib/**",
 ]
 publish = false
 
@@ -26,3 +27,4 @@ resolver = "3"
 feed-lib = { path = "./feed-lib" }
 clap = { version = "4.0", features = ["derive"] }
 tokio = "1.47.1"
+env_logger = "0.11.8"

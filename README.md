@@ -22,6 +22,16 @@ Make sure you have Rust installed. Then:
 ```bash
 git clone https://github.com/yourusername/FRusst.git
 cd FRusst
+mkdir .cargo && touch .cargo/config.toml
+
+cat <<EOF >.cargo/config.toml
+[env]
+MONGODB_URI = "<mongodb.net cluster>"
+MONGODB_LOGIN = "<username>"
+MONGODB_PWD = "<password>"
+MONGODB_CLUSTER = "<cluster name>"
+EOF
+
 cargo build --release
 ```
 
@@ -31,13 +41,16 @@ The binary will be in `target/release/frusst`.
 
 ```bash
 # Manage some feed
-./frusst add https://example.com/rss example.com   # Add a new RSS feed with a custom name
+./frusst add https://example.com/rss example       # Add a new RSS feed with a custom name
 ./frusst list                                      # List all subscribed feeds
 ./frusst remove example.com                        # Remove a feed
+
 # Update feeds news
-./frusst fetch                              # Fetch the latest articles from all feeds 
-./frusst fetch -F[--feed]                              # Fetch the latest articles from feed list, seperated by comma 
-./frusst get example.com 10                        # Show the last 10 articles from a feed 
+./frusst fetch                                     # Fetch the latest articles from all feeds
+./frusst fetch -F[--feed] "example"                # Fetch the latest articles from feed(s), seperated by comma
+./frusst get                                       # Show the last 10 articles
+./frusst get -n 5                                  # Show the last 5 articles
+./frusst get -F[--feed] "example"                  # Show the last 10 articles from feed(s), seperated by comma
 ```
 
 ## Roadmap
@@ -65,7 +78,7 @@ Follow Rust's best practices and formatting.
 
 ## License
 
-This project is licensed under the Apache 2.0 and MIT licenses. See the [LICENSE-APACHE](LICENSE-APACHE) and [LICENSE-MIT](LICENSE-MIT) files for details.
+This project is licensed under the Apache 2.0 or MIT licenses. See the [LICENSE-APACHE](LICENSE-Apache) or [LICENSE-MIT](LICENSE-MIT) files for details.
 
 ## Tagline
 
